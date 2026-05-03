@@ -1,0 +1,588 @@
+/* -----------------------------------------------
+   Design tokens from DESIGN.md
+----------------------------------------------- */
+:root {
+  /* Surface */
+  --surface:                   #f7f9fb;
+  --surface-dim:               #d8dadc;
+  --surface-bright:            #f7f9fb;
+  --surface-container-lowest:  #ffffff;
+  --surface-container-low:     #f2f4f6;
+  --surface-container:         #eceef0;
+  --surface-container-high:    #e6e8ea;
+  --surface-container-highest: #e0e3e5;
+  --on-surface:                #191c1e;
+  --on-surface-variant:        #3c4a42;
+  --inverse-surface:           #2d3133;
+  --inverse-on-surface:        #eff1f3;
+  --outline:                   #6c7a71;
+  --outline-variant:           #bbcabf;
+  --surface-tint:              #006c49;
+
+  /* Primary */
+  --primary:                   #006c49;
+  --on-primary:                #ffffff;
+  --primary-container:         #10b981;
+  --on-primary-container:      #00422b;
+  --inverse-primary:           #4edea3;
+
+  /* Secondary */
+  --secondary:                 #515f74;
+  --on-secondary:              #ffffff;
+  --secondary-container:       #d5e3fd;
+  --on-secondary-container:    #57657b;
+
+  /* Tertiary / Error */
+  --tertiary:                  #a43a3a;
+  --on-tertiary:               #ffffff;
+  --tertiary-container:        #fc7c78;
+  --on-tertiary-container:     #711419;
+  --error:                     #ba1a1a;
+  --on-error:                  #ffffff;
+  --error-container:           #ffdad6;
+  --on-error-container:        #93000a;
+
+  /* Background */
+  --background:                #f7f9fb;
+  --on-background:             #191c1e;
+  --surface-variant:           #e0e3e5;
+
+  /* Spacing */
+  --unit:                4px;
+  --container-padding:   24px;
+  --gutter:              16px;
+  --row-height-sm:       40px;
+  --row-height-md:       56px;
+
+  /* Radius */
+  --radius-sm:     2px;
+  --radius:        4px;
+  --radius-md:     6px;
+  --radius-lg:     8px;
+  --radius-xl:     12px;
+  --radius-full:   9999px;
+}
+
+/* -----------------------------------------------
+   Reset & Base
+----------------------------------------------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  background-color: var(--background);
+  color: var(--on-background);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* -----------------------------------------------
+   Layout
+----------------------------------------------- */
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 var(--container-padding) calc(var(--unit) * 12);
+}
+
+/* -----------------------------------------------
+   Header
+----------------------------------------------- */
+.app-header {
+  background-color: var(--surface-container-lowest);
+  border-bottom: 1px solid var(--outline-variant);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.header-inner {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+  height: var(--row-height-md);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gutter);
+}
+
+.app-brand {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--primary);
+  white-space: nowrap;
+}
+
+.month-nav {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--unit) * 2);
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.month-title {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 24px;
+  letter-spacing: -0.01em;
+  color: var(--on-surface);
+  min-width: 140px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* -----------------------------------------------
+   Summary
+----------------------------------------------- */
+.summary-section {
+  padding: calc(var(--unit) * 4) 0 calc(var(--unit) * 2);
+  border-bottom: 1px solid var(--outline-variant);
+  margin-bottom: calc(var(--unit) * 4);
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background-color: var(--outline-variant);
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.summary-card {
+  background-color: var(--surface-container-lowest);
+  padding: calc(var(--unit) * 3) calc(var(--unit) * 4);
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--unit) * 1);
+}
+
+.summary-label {
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 16px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--on-surface-variant);
+}
+
+.summary-value {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: 0.02em;
+  color: var(--on-surface);
+}
+
+.summary-value.paid  { color: var(--primary); }
+.summary-value.pending { color: var(--tertiary); }
+
+/* -----------------------------------------------
+   Add Bill Form
+----------------------------------------------- */
+.add-bill-section {
+  margin-bottom: calc(var(--unit) * 3);
+}
+
+.add-bill-form {
+  display: flex;
+  gap: calc(var(--unit) * 2);
+  align-items: center;
+}
+
+.input-field {
+  flex: 1;
+  height: var(--row-height-sm);
+  padding: 0 calc(var(--unit) * 3);
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius);
+  background-color: var(--surface-container-lowest);
+  color: var(--on-surface);
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 20px;
+  outline: none;
+  transition: border-color 0.1s;
+}
+
+.input-field:focus {
+  border-width: 2px;
+  border-color: var(--on-surface-variant);
+}
+
+.input-field::placeholder {
+  color: var(--outline);
+}
+
+.input-amount {
+  flex: 0 0 100px;
+  font-family: inherit;
+  letter-spacing: 0.02em;
+}
+
+.form-error {
+  margin-top: calc(var(--unit) * 2);
+  font-size: 13px;
+  color: var(--error);
+}
+
+/* -----------------------------------------------
+   Filters
+----------------------------------------------- */
+.filters-bar {
+  display: flex;
+  gap: calc(var(--unit) * 2);
+  padding-bottom: calc(var(--unit) * 2);
+  border-bottom: 1px solid var(--outline-variant);
+  margin-bottom: 0;
+}
+
+/* -----------------------------------------------
+   Bills List
+----------------------------------------------- */
+.bills-section {
+  /* no extra padding — row-and-rule defines rhythm */
+}
+
+.bills-list {
+  list-style: none;
+}
+
+.bill-row {
+  display: flex;
+  align-items: center;
+  height: var(--row-height-md);
+  border-bottom: 1px solid var(--outline-variant);
+  gap: calc(var(--unit) * 3);
+  padding: 0 calc(var(--unit) * 1);
+  background-color: var(--surface-container-lowest);
+  transition: background-color 0.1s;
+}
+
+.bill-row:hover {
+  background-color: var(--surface-container-low);
+}
+
+.bill-row.is-paid {
+  opacity: 0.5;
+}
+
+/* Custom checkbox */
+.bill-checkbox-wrap {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+.bill-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--outline);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  background-color: transparent;
+  transition: background-color 0.1s, border-color 0.1s;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.bill-checkbox:checked {
+  background-color: var(--primary-container);
+  border-color: var(--primary-container);
+}
+
+.bill-checkbox:checked::after {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 1px;
+  width: 6px;
+  height: 10px;
+  border: 2px solid var(--on-primary);
+  border-top: none;
+  border-left: none;
+  transform: rotate(45deg);
+}
+
+.bill-checkbox:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Bill name */
+.bill-name {
+  flex: 1;
+  font-size: 14px;
+  color: var(--on-surface);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  padding: calc(var(--unit) * 1) 0;
+}
+
+.bill-name:hover {
+  color: var(--primary);
+}
+
+.bill-name-input {
+  flex: 1;
+  height: 32px;
+  padding: 0 calc(var(--unit) * 2);
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius);
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--on-surface);
+  background-color: var(--surface-container-lowest);
+  outline: none;
+}
+
+.bill-name-input:focus {
+  border-width: 2px;
+  border-color: var(--on-surface-variant);
+}
+
+/* Bill amount */
+.bill-amount {
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--on-surface);
+  white-space: nowrap;
+  cursor: pointer;
+  padding: calc(var(--unit) * 1) 0;
+  min-width: 80px;
+  text-align: right;
+}
+
+.bill-amount:hover {
+  color: var(--primary);
+}
+
+.bill-amount-input {
+  width: 90px;
+  height: 32px;
+  padding: 0 calc(var(--unit) * 2);
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--on-surface);
+  background-color: var(--surface-container-lowest);
+  outline: none;
+  text-align: right;
+}
+
+.bill-amount-input:focus {
+  border-width: 2px;
+  border-color: var(--on-surface-variant);
+}
+
+/* Delete button */
+.btn-delete {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  border-radius: var(--radius);
+  color: var(--outline);
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  transition: color 0.1s, background-color 0.1s;
+  opacity: 0;
+}
+
+.bill-row:hover .btn-delete,
+.bill-row:focus-within .btn-delete {
+  opacity: 1;
+}
+
+.btn-delete:hover {
+  color: var(--error);
+  background-color: var(--error-container);
+}
+
+/* Empty list */
+.bills-empty {
+  padding: calc(var(--unit) * 8) 0;
+  text-align: center;
+  color: var(--outline);
+  font-size: 14px;
+}
+
+/* Empty state */
+.empty-state {
+  padding: calc(var(--unit) * 8) 0;
+  text-align: center;
+  border-top: 1px solid var(--outline-variant);
+}
+
+.empty-message {
+  color: var(--outline);
+  margin-bottom: calc(var(--unit) * 4);
+  font-size: 14px;
+}
+
+/* -----------------------------------------------
+   Buttons
+----------------------------------------------- */
+.btn-primary {
+  height: var(--row-height-sm);
+  padding: 0 calc(var(--unit) * 5);
+  background-color: var(--primary);
+  color: var(--on-primary);
+  border: none;
+  border-radius: var(--radius);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.1s;
+  flex-shrink: 0;
+}
+
+.btn-primary:hover {
+  background-color: var(--on-primary-container);
+}
+
+.btn-primary:active {
+  background-color: var(--on-primary-container);
+}
+
+.btn-ghost {
+  height: var(--row-height-sm);
+  padding: 0 calc(var(--unit) * 4);
+  background: none;
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius);
+  color: var(--on-surface-variant);
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color 0.1s, background-color 0.1s;
+}
+
+.btn-ghost:hover {
+  border-color: var(--outline);
+  background-color: var(--surface-container-low);
+}
+
+.btn-filter {
+  height: var(--row-height-sm);
+  padding: 0 calc(var(--unit) * 4);
+  background: none;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  color: var(--on-surface-variant);
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.1s, border-color 0.1s, color 0.1s;
+}
+
+.btn-filter:hover {
+  background-color: var(--surface-container-low);
+}
+
+.btn-filter.active {
+  background-color: var(--surface-container);
+  border-color: var(--outline-variant);
+  color: var(--on-surface);
+}
+
+/* -----------------------------------------------
+   Chips / Badges
+----------------------------------------------- */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 calc(var(--unit) * 2);
+  height: 20px;
+  border-radius: var(--radius);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.chip-overdue {
+  background-color: var(--error-container);
+  color: var(--on-error-container);
+}
+
+.chip-upcoming {
+  background-color: var(--surface-container);
+  color: var(--on-surface-variant);
+}
+
+/* -----------------------------------------------
+   Responsive — mobile
+----------------------------------------------- */
+@media (max-width: 600px) {
+  :root {
+    --container-padding: 16px;
+  }
+
+  .header-inner {
+    flex-direction: column;
+    height: auto;
+    padding-top: calc(var(--unit) * 3);
+    padding-bottom: calc(var(--unit) * 3);
+    gap: calc(var(--unit) * 2);
+  }
+
+  .month-nav {
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .summary-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .add-bill-form {
+    flex-wrap: wrap;
+  }
+
+  .input-amount {
+    flex: 0 0 90px;
+  }
+
+  .btn-delete {
+    opacity: 1;
+  }
+}
