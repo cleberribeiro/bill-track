@@ -2,6 +2,7 @@ import Fastify from 'fastify';
 import fastifyStatic from '@fastify/static';
 import fastifyCookie from '@fastify/cookie';
 import fastifySession from '@fastify/session';
+import fastifyRateLimit from '@fastify/rate-limit';
 import crypto from 'node:crypto';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
@@ -23,9 +24,16 @@ export async function buildApp(options = {}) {
   const fastify = Fastify({
     logger: false,
     // Required behind Render/Heroku/etc. so secure session cookies are set over HTTPS.
-    trustProxy: process.env.NODE_ENV === 'production',
+    trustProxy: process.env.NODE_ENV === 'production' ? 1 : false,
     ...options,
   });
+
+  if (process.env.NODE_ENV === 'production') {
+    const secret = process.env.SESSION_SECRET || '';
+    if (secret.length < 32) {
+      throw new Error('SESSION_SECRET must be at least 32 characters in production');
+    }
+  }
 
   await fastify.register(fastifyCookie);
   await fastify.register(fastifySession, {
@@ -38,6 +46,7 @@ export async function buildApp(options = {}) {
       maxAge: 1000 * 60 * 60 * 24 * 30,
     },
   });
+  await fastify.register(fastifyRateLimit, { global: false });
 
   await fastify.register(fastifyStatic, {
     root: join(__dirname, 'public'),
@@ -55,6 +64,12 @@ export async function buildApp(options = {}) {
   });
 
   fastify.post('/api/login', {
+    config: {
+      rateLimit: {
+        max: 5,
+        timeWindow: '15 minutes',
+      },
+    },
     schema: {
       body: {
         type: 'object',
@@ -62,11 +77,12 @@ export async function buildApp(options = {}) {
         properties: { password: { type: 'string' } },
       },
     },
-  }, (req, reply) => {
+  }, async (req, reply) => {
     const expected = process.env.APP_PASSWORD || '';
     if (!expected || !passwordMatches(req.body.password, expected)) {
       return reply.code(401).send({ error: 'Senha inválida' });
     }
+    await req.session.regenerate();
     req.session.authenticated = true;
     return { ok: true };
   });
@@ -82,7 +98,11 @@ export async function buildApp(options = {}) {
 
   fastify.setErrorHandler((error, req, reply) => {
     const statusCode = error.statusCode || 500;
-    reply.code(statusCode).send({ error: error.message });
+    if (statusCode >= 500) {
+      req.log.error(error);
+      return reply.code(statusCode).send({ error: 'Internal Server Error' });
+    }
+    return reply.code(statusCode).send({ error: error.message });
   });
 
   return fastify;
