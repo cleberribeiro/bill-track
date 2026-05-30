@@ -10,7 +10,7 @@
   "license": "ISC",
   "author": "Cleber Ribeiro <cleber.ramos.ribeiro@gmail.com>",
   "type": "module",
-  "main": "index.js",
+  "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
     "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --runInBand"
