@@ -20,7 +20,12 @@ function passwordMatches(provided, expected) {
 }
 
 export async function buildApp(options = {}) {
-  const fastify = Fastify({ logger: false, ...options });
+  const fastify = Fastify({
+    logger: false,
+    // Required behind Render/Heroku/etc. so secure session cookies are set over HTTPS.
+    trustProxy: process.env.NODE_ENV === 'production',
+    ...options,
+  });
 
   await fastify.register(fastifyCookie);
   await fastify.register(fastifySession, {

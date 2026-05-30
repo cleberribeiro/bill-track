@@ -275,3 +275,35 @@ describe('BillTrack API', () => {
     });
   });
 });
+
+describe('BillTrack production session cookies', () => {
+  const previousNodeEnv = process.env.NODE_ENV;
+
+  afterAll(() => {
+    if (previousNodeEnv === undefined) {
+      delete process.env.NODE_ENV;
+    } else {
+      process.env.NODE_ENV = previousNodeEnv;
+    }
+  });
+
+  test('sets a secure session cookie when running behind a proxy', async () => {
+    process.env.NODE_ENV = 'production';
+    const app = await buildApp();
+
+    try {
+      const loginResponse = await app.inject({
+        method: 'POST',
+        url: '/api/login',
+        payload: { password: process.env.APP_PASSWORD },
+        headers: { 'x-forwarded-proto': 'https' },
+      });
+
+      expect(loginResponse.statusCode).toBe(200);
+      expect(loginResponse.headers['set-cookie']).toContain('Secure');
+      expect(loginResponse.cookies.some((c) => c.name === 'billtrack.sid')).toBe(true);
+    } finally {
+      await app.close();
+    }
+  });
+});

@@ -43,6 +43,7 @@ function formatBRL(value) {
 async function api(method, path, body) {
   const opts = {
     method,
+    credentials: 'same-origin',
     headers: body !== undefined ? { 'Content-Type': 'application/json' } : {},
     body: body !== undefined ? JSON.stringify(body) : undefined,
   };
@@ -309,7 +310,7 @@ document.getElementById('btn-duplicate').addEventListener('click', async () => {
    Logout
 ----------------------------------------------- */
 document.getElementById('btn-logout').addEventListener('click', async () => {
-  await fetch('/api/logout', { method: 'POST' });
+  await fetch('/api/logout', { method: 'POST', credentials: 'same-origin' });
   window.location.href = '/login.html';
 });
 
