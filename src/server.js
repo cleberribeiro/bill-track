@@ -1,9 +1,12 @@
 import { buildApp } from './app.js';
+import { initializeSchema } from './db.js';
 
 try {
+  await initializeSchema();
   const fastify = await buildApp({ logger: true });
-  await fastify.listen({ port: 3000, host: '0.0.0.0' });
-  console.log('BillTrack running at http://localhost:3000');
+  const port = Number(process.env.PORT) || 3000;
+  await fastify.listen({ port, host: '0.0.0.0' });
+  console.log(`BillTrack running on port ${port}`);
 } catch (err) {
   console.error(err);
   process.exit(1);

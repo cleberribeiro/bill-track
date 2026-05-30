@@ -47,6 +47,10 @@ async function api(method, path, body) {
     body: body !== undefined ? JSON.stringify(body) : undefined,
   };
   const res = await fetch(path, opts);
+  if (res.status === 401) {
+    window.location.href = '/login.html';
+    throw new Error('Não autenticado');
+  }
   if (res.status === 204) return null;
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || 'Erro desconhecido');
@@ -299,6 +303,14 @@ document.getElementById('btn-duplicate').addEventListener('click', async () => {
   } catch (err) {
     alert(err.message);
   }
+});
+
+/* -----------------------------------------------
+   Logout
+----------------------------------------------- */
+document.getElementById('btn-logout').addEventListener('click', async () => {
+  await fetch('/api/logout', { method: 'POST' });
+  window.location.href = '/login.html';
 });
 
 /* -----------------------------------------------

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Entrar - BillTrack</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/style.css" />
+  <style>
+    .login-wrap {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--container-padding);
+    }
+    .login-card {
+      width: 100%;
+      max-width: 360px;
+      background-color: var(--surface-container-lowest);
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--radius-lg);
+      padding: calc(var(--unit) * 8) calc(var(--unit) * 6);
+    }
+    .login-brand {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: calc(var(--unit) * 1);
+    }
+    .login-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--on-surface);
+      margin-bottom: calc(var(--unit) * 6);
+    }
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: calc(var(--unit) * 3);
+    }
+    .login-form .btn-primary {
+      width: 100%;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-wrap">
+    <div class="login-card">
+      <div class="login-brand">BillTrack</div>
+      <h1 class="login-title">Entrar</h1>
+      <form id="login-form" class="login-form">
+        <input
+          id="input-password"
+          type="password"
+          class="input-field"
+          placeholder="Senha"
+          autocomplete="current-password"
+          required
+          autofocus
+        />
+        <button type="submit" class="btn-primary">Entrar</button>
+        <p id="login-error" class="form-error" hidden></p>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const errorEl = document.getElementById('login-error');
+      errorEl.hidden = true;
+      const password = document.getElementById('input-password').value;
+
+      const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password }),
+      });
+
+      if (res.ok) {
+        window.location.href = '/';
+        return;
+      }
+
+      const data = await res.json().catch(() => ({}));
+      errorEl.textContent = data.error || 'Não foi possível entrar.';
+      errorEl.hidden = false;
+    });
+  </script>
+</body>
+</html>
