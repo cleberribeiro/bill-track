@@ -21,11 +21,17 @@ describe('BillTrack API', () => {
   let authCookie;
 
   function inject(opts) {
+    const method = (opts.method || 'GET').toUpperCase();
+    const csrfHeader =
+      method === 'POST' || method === 'PATCH' || method === 'DELETE'
+        ? { 'X-Requested-With': 'XMLHttpRequest' }
+        : {};
+
     return app.inject({
       ...opts,
       headers: {
         cookie: authCookie,
-        'x-requested-with': 'XMLHttpRequest',
+        ...csrfHeader,
         ...(opts.headers || {}),
       },
     });
@@ -83,6 +89,16 @@ describe('BillTrack API', () => {
       payload: { password: 'wrong-password' },
     });
     expect(response.statusCode).toBe(401);
+  });
+
+  test('rejects mutating requests without X-Requested-With header', async () => {
+    const response = await app.inject({
+      method: 'POST',
+      url: '/api/months/2026-05/bills',
+      payload: { name: 'test', amount: 10 },
+      headers: { cookie: authCookie },
+    });
+    expect(response.statusCode).toBe(403);
   });
 
   test('creates bills, updates status, and filters by status', async () => {
