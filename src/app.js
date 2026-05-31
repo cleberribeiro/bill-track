@@ -1,5 +1,6 @@
 import Fastify from 'fastify';
 import fastifyStatic from '@fastify/static';
+import fastifyHelmet from '@fastify/helmet';
 import fastifyCookie from '@fastify/cookie';
 import fastifySession from '@fastify/session';
 import fastifyRateLimit from '@fastify/rate-limit';
@@ -8,6 +9,7 @@ import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import billsRoutes from './routes/bills.js';
 import monthsRoutes from './routes/months.js';
+import db from './db.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -52,6 +54,16 @@ export async function buildApp(options = {}) {
     root: join(__dirname, 'public'),
     prefix: '/',
   });
+  await fastify.register(fastifyHelmet, {
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        styleSrc: ["'self'", 'fonts.googleapis.com'],
+        fontSrc: ["'self'", 'fonts.gstatic.com'],
+        frameAncestors: ["'none'"],
+      },
+    },
+  });
 
   fastify.addHook('preHandler', (req, reply, done) => {
     if (req.url.startsWith('/api') && !PUBLIC_API_PATHS.has(req.url.split('?')[0])) {
@@ -61,6 +73,28 @@ export async function buildApp(options = {}) {
       }
     }
     done();
+  });
+
+  fastify.addHook('preHandler', (req, reply, done) => {
+    const method = req.method;
+    if (
+      (method === 'POST' || method === 'PATCH' || method === 'DELETE') &&
+      req.url.startsWith('/api') &&
+      req.url.split('?')[0] !== '/api/login'
+    ) {
+      if (req.headers['x-requested-with'] !== 'XMLHttpRequest') {
+        reply.code(403).send({ error: 'Forbidden' });
+        return;
+      }
+    }
+    done();
+  });
+
+  fastify.addHook('onSend', (req, reply, payload, done) => {
+    if (req.url.startsWith('/api')) {
+      reply.header('Cache-Control', 'no-store');
+    }
+    done(null, payload);
   });
 
   fastify.post('/api/login', {
@@ -91,6 +125,11 @@ export async function buildApp(options = {}) {
     req.session.destroy(() => {
       reply.send({ ok: true });
     });
+  });
+
+  fastify.get('/api/health', async () => {
+    await db.execute('SELECT 1');
+    return { ok: true };
   });
 
   await fastify.register(billsRoutes);

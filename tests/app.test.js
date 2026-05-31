@@ -23,7 +23,11 @@ describe('BillTrack API', () => {
   function inject(opts) {
     return app.inject({
       ...opts,
-      headers: { cookie: authCookie, ...(opts.headers || {}) },
+      headers: {
+        cookie: authCookie,
+        'x-requested-with': 'XMLHttpRequest',
+        ...(opts.headers || {}),
+      },
     });
   }
 

@@ -1,3 +1,13 @@
 node_modules/
 data/
 .env
+.agents/
+.github/
+.openspec/
+.codex/
+.claude/
+.vscode/
+.DS_Store
+.idea/
+.cursor/
+.windsurf/

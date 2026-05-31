@@ -44,7 +44,10 @@ async function api(method, path, body) {
   const opts = {
     method,
     credentials: 'same-origin',
-    headers: body !== undefined ? { 'Content-Type': 'application/json' } : {},
+    headers: {
+      ...(body !== undefined ? { 'Content-Type': 'application/json' } : {}),
+      ...(method !== 'GET' ? { 'X-Requested-With': 'XMLHttpRequest' } : {}),
+    },
     body: body !== undefined ? JSON.stringify(body) : undefined,
   };
   const res = await fetch(path, opts);
@@ -310,7 +313,11 @@ document.getElementById('btn-duplicate').addEventListener('click', async () => {
    Logout
 ----------------------------------------------- */
 document.getElementById('btn-logout').addEventListener('click', async () => {
-  await fetch('/api/logout', { method: 'POST', credentials: 'same-origin' });
+  await fetch('/api/logout', {
+    method: 'POST',
+    credentials: 'same-origin',
+    headers: { 'X-Requested-With': 'XMLHttpRequest' },
+  });
   window.location.href = '/login.html';
 });
 

@@ -6,7 +6,7 @@ services:
     region: oregon
     buildCommand: npm install
     startCommand: npm start
-    healthCheckPath: /login.html
+    healthCheckPath: /api/health
     envVars:
       - key: NODE_ENV
         value: production
