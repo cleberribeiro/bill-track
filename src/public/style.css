@@ -321,9 +321,7 @@ a.app-brand:focus-visible { outline: 2px solid var(--primary); outline-offset: 2
   gap: calc(var(--unit) * 3);
   padding: 0 calc(var(--unit) * 1);
   background-color: var(--surface-container-lowest);
-  max-height: 80px;
-  transition: background-color 0.1s, opacity 200ms,
-              max-height 200ms ease-out;
+  transition: background-color 0.1s;
 }
 
 .bill-row:hover {
@@ -499,16 +497,31 @@ a.app-brand:focus-visible { outline: 2px solid var(--primary); outline-offset: 2
   font-size: 14px;
 }
 
-/* Empty state */
+/* Empty state — month has no bills */
 .empty-state {
   padding: calc(var(--unit) * 8) 0;
   text-align: center;
   border-top: 1px solid var(--outline-variant);
 }
 
+.empty-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--on-surface);
+  margin-bottom: calc(var(--unit) * 2);
+}
+
 .empty-message {
   color: var(--outline);
+  font-size: 14px;
   margin-bottom: calc(var(--unit) * 4);
+}
+
+/* Filter empty — month has bills, but active filter matches none */
+.filter-empty-message {
+  padding: calc(var(--unit) * 4) 0;
+  text-align: center;
+  color: var(--outline);
   font-size: 14px;
 }
 
@@ -668,37 +681,6 @@ a.app-brand:focus-visible { outline: 2px solid var(--primary); outline-offset: 2
 }
 
 /* -----------------------------------------------
-   Micro-animations
------------------------------------------------ */
-@keyframes checkbox-pulse {
-  0%, 100% { transform: scale(1); }
-  50%      { transform: scale(1.08); }
-}
-
-.bill-checkbox.just-checked {
-  animation: checkbox-pulse 120ms ease-out;
-}
-
-/* Add bill — slide-down + fade in */
-.bill-row.is-entering {
-  max-height: 0 !important;
-  opacity: 0;
-  padding-top: 0;
-  padding-bottom: 0;
-  overflow: hidden;
-}
-
-/* Delete bill — slide-up + fade out */
-.bill-row.is-leaving {
-  max-height: 0;
-  opacity: 0;
-  padding-top: 0;
-  padding-bottom: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-/* -----------------------------------------------
    Responsive — mobile
 ----------------------------------------------- */
 @media (max-width: 600px) {
@@ -747,15 +729,5 @@ a.app-brand:focus-visible { outline: 2px solid var(--primary); outline-offset: 2
   .bill-name-input,
   .bill-amount-input {
     font-size: 16px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    transition-duration: 0.01ms !important;
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
   }
 }

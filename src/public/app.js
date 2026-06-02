@@ -64,12 +64,16 @@ async function api(method, path, body) {
 /* -----------------------------------------------
    Summary
 ----------------------------------------------- */
-async function loadSummary() {
-  const s = await api('GET', `/api/months/${currentYearMonth}/summary`);
+function updateSummaryUI(s) {
   document.getElementById('summary-total').textContent = formatBRL(s.total);
   document.getElementById('summary-paid').textContent = formatBRL(s.paid);
   document.getElementById('summary-pending').textContent = formatBRL(s.pending);
   document.getElementById('summary-pending-count').textContent = s.pendingCount;
+}
+
+async function loadSummary() {
+  const s = await api('GET', `/api/months/${currentYearMonth}/summary`);
+  updateSummaryUI(s);
 }
 
 /* -----------------------------------------------
@@ -77,23 +81,38 @@ async function loadSummary() {
 ----------------------------------------------- */
 async function loadBills() {
   const url = `/api/months/${currentYearMonth}/bills${currentFilter ? `?status=${currentFilter}` : ''}`;
-  const bills = await api('GET', url);
-  renderBills(bills);
-  await loadSummary();
+  const [bills, summary] = await Promise.all([
+    api('GET', url),
+    api('GET', `/api/months/${currentYearMonth}/summary`),
+  ]);
+  updateSummaryUI(summary);
+  renderBills(bills, summary);
 }
 
-function renderBills(bills) {
+function renderBills(bills, summary) {
   const list = document.getElementById('bills-list');
   const emptyState = document.getElementById('empty-state');
+  const filterEmpty = document.getElementById('filter-empty-message');
 
   list.innerHTML = '';
+  emptyState.hidden = true;
+  filterEmpty.hidden = true;
 
-  if (bills.length === 0) {
-    emptyState.hidden = false;
-  } else {
-    emptyState.hidden = true;
+  if (bills.length > 0) {
     bills.forEach(bill => list.appendChild(createBillRow(bill)));
+    return;
   }
+
+  const monthIsCompletelyEmpty = summary.total === 0 && summary.pendingCount === 0;
+
+  if (!monthIsCompletelyEmpty && (currentFilter === 'pending' || currentFilter === 'paid')) {
+    filterEmpty.textContent =
+      currentFilter === 'pending' ? 'Nada pendente. ✓' : 'Nada pago ainda.';
+    filterEmpty.hidden = false;
+    return;
+  }
+
+  emptyState.hidden = false;
 }
 
 function createBillRow(bill) {
@@ -238,7 +257,7 @@ async function deleteBill(id, rowEl) {
     rowEl.remove();
     const list = document.getElementById('bills-list');
     if (list.children.length === 0) {
-      document.getElementById('empty-state').hidden = false;
+      loadBills();
     }
   }, 200);
   await loadSummary();
@@ -261,6 +280,7 @@ document.getElementById('add-bill-form').addEventListener('submit', async e => {
 
   const bill = await api('POST', `/api/months/${currentYearMonth}/bills`, { name, amount });
   document.getElementById('empty-state').hidden = true;
+  document.getElementById('filter-empty-message').hidden = true;
   const li = createBillRow(bill);
   li.classList.add('is-entering');
   document.getElementById('bills-list').appendChild(li);

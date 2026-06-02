@@ -96,10 +96,14 @@
           <li class="bills-empty" id="bills-loading">Carregando...</li>
         </ul>
 
-        <!-- Empty state with duplicate action -->
+        <!-- Filter empty — month has bills, but active filter matches none -->
+        <p id="filter-empty-message" class="filter-empty-message" hidden></p>
+
+        <!-- Empty state — month has no bills at all -->
         <div id="empty-state" class="empty-state" hidden>
-          <p class="empty-message">Nenhuma conta cadastrada neste mês.</p>
-          <button id="btn-duplicate" class="btn-ghost">Criar a partir do mês anterior</button>
+          <h2 class="empty-title">Mês em branco</h2>
+          <p class="empty-message">Adicione contas no campo acima ou copie de um mês anterior.</p>
+          <button id="btn-duplicate" class="btn-ghost">Copiar do mês anterior</button>
         </div>
       </section>
 
