@@ -72,6 +72,32 @@
   padding: 0;
 }
 
+/* -----------------------------------------------
+   Tactile polish (always-on)
+----------------------------------------------- */
+button,
+a,
+input[type="checkbox"],
+.bill-row,
+.bill-name,
+.bill-amount {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  user-select: none;
+}
+
+.btn-ghost:active,
+.btn-filter:active {
+  background-color: var(--surface-container);
+}
+
+.bill-row:active {
+  background-color: var(--surface-container);
+}
+
 html, body {
   height: 100%;
   background-color: var(--background);
@@ -311,6 +337,18 @@ a.app-brand:focus-visible { outline: 2px solid var(--primary); outline-offset: 2
   flex-shrink: 0;
   display: flex;
   align-items: center;
+  position: relative;
+}
+
+/* Expands checkbox tap area to 48x48 keeping 18x18 visual */
+.bill-checkbox::before {
+  content: '';
+  position: absolute;
+  top: -15px;
+  bottom: -15px;
+  left: -15px;
+  right: -8px;
+  z-index: 1;
 }
 
 .bill-checkbox {
@@ -497,6 +535,7 @@ a.app-brand:focus-visible { outline: 2px solid var(--primary); outline-offset: 2
 
 .btn-primary:active {
   background-color: var(--on-primary-container);
+  transform: scale(0.98);
 }
 
 .btn-ghost {
@@ -632,6 +671,12 @@ a.app-brand:focus-visible { outline: 2px solid var(--primary); outline-offset: 2
 @media (max-width: 600px) {
   :root {
     --container-padding: 16px;
+    --row-height-sm: 48px;
+  }
+
+  html, body {
+    font-size: 16px;
+    line-height: 22px;
   }
 
   .header-inner {
@@ -660,6 +705,14 @@ a.app-brand:focus-visible { outline: 2px solid var(--primary); outline-offset: 2
   }
 
   .btn-delete {
+    width: 44px;
+    height: 44px;
     opacity: 1;
+  }
+
+  .input-field,
+  .bill-name-input,
+  .bill-amount-input {
+    font-size: 16px;
   }
 }
