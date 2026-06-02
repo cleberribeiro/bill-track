@@ -289,6 +289,11 @@ document.getElementById('btn-next-month').addEventListener('click', () => {
   setMonth(nextMonth(currentYearMonth));
 });
 
+document.getElementById('brand-link').addEventListener('click', (e) => {
+  e.preventDefault();
+  setMonth(getTodayYearMonth());
+});
+
 /* -----------------------------------------------
    Duplicate month
 ----------------------------------------------- */

@@ -130,6 +130,26 @@ html, body {
   white-space: nowrap;
 }
 
+/* -----------------------------------------------
+   Brand icon (header)
+----------------------------------------------- */
+.brand-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+a.app-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+}
+a.app-brand:hover { text-decoration: none; }
+a.app-brand:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+
 .month-nav {
   display: flex;
   align-items: center;
@@ -569,12 +589,22 @@ html, body {
   padding: calc(var(--unit) * 8) calc(var(--unit) * 6);
 }
 
+.login-icon {
+  width: 56px;
+  height: 56px;
+  display: block;
+  margin: 0 auto calc(var(--unit) * 3);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
 .login-brand {
-  font-size: 14px;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--primary);
+  text-align: center;
   margin-bottom: calc(var(--unit) * 1);
 }
 
@@ -582,6 +612,7 @@ html, body {
   font-size: 20px;
   font-weight: 600;
   color: var(--on-surface);
+  text-align: center;
   margin-bottom: calc(var(--unit) * 6);
 }
 

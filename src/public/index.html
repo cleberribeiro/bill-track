@@ -15,7 +15,16 @@
     <!-- Header -->
     <header class="app-header">
       <div class="header-inner">
-        <span class="app-brand">BillTrack</span>
+        <a href="#" id="brand-link" class="app-brand" aria-label="Ir para o mês atual">
+          <svg class="brand-icon" viewBox="0 0 512 512" aria-hidden="true">
+            <rect width="512" height="512" rx="64" fill="#006c49"/>
+            <rect x="128" y="248" width="120" height="16" rx="8" fill="#ffffff"/>
+            <path d="M 296 256 L 336 296 L 400 224"
+                  fill="none" stroke="#ffffff" stroke-width="32"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>BILLTRACK</span>
+        </a>
         <nav class="month-nav">
           <button id="btn-prev-month" class="btn-ghost btn-icon" aria-label="Mês anterior">&#8592; Anterior</button>
           <h1 id="month-title" class="month-title">---</h1>
