@@ -108,7 +108,7 @@ function createBillRow(bill) {
   checkbox.type = 'checkbox';
   checkbox.className = 'bill-checkbox';
   checkbox.checked = bill.status === 'paid';
-  checkbox.addEventListener('change', () => toggleStatus(bill.id, checkbox.checked, li));
+  checkbox.addEventListener('change', () => toggleStatus(bill.id, checkbox.checked, li, checkbox));
   checkWrap.appendChild(checkbox);
 
   // Name
@@ -139,8 +139,12 @@ function createBillRow(bill) {
 /* -----------------------------------------------
    Toggle paid / pending
 ----------------------------------------------- */
-async function toggleStatus(id, checked, rowEl) {
+async function toggleStatus(id, checked, rowEl, checkboxEl) {
   const newStatus = checked ? 'paid' : 'pending';
+  if (checkboxEl) {
+    checkboxEl.classList.add('just-checked');
+    setTimeout(() => checkboxEl.classList.remove('just-checked'), 120);
+  }
   await api('PATCH', `/api/bills/${id}`, { status: newStatus });
   if (checked) {
     rowEl.classList.add('is-paid');
@@ -229,11 +233,14 @@ function startEditAmount(bill, amountSpan, rowEl) {
 async function deleteBill(id, rowEl) {
   if (!confirm('Excluir esta conta?')) return;
   await api('DELETE', `/api/bills/${id}`);
-  rowEl.remove();
-  const list = document.getElementById('bills-list');
-  if (list.children.length === 0) {
-    document.getElementById('empty-state').hidden = false;
-  }
+  rowEl.classList.add('is-leaving');
+  setTimeout(() => {
+    rowEl.remove();
+    const list = document.getElementById('bills-list');
+    if (list.children.length === 0) {
+      document.getElementById('empty-state').hidden = false;
+    }
+  }, 200);
   await loadSummary();
 }
 
@@ -254,7 +261,13 @@ document.getElementById('add-bill-form').addEventListener('submit', async e => {
 
   const bill = await api('POST', `/api/months/${currentYearMonth}/bills`, { name, amount });
   document.getElementById('empty-state').hidden = true;
-  document.getElementById('bills-list').appendChild(createBillRow(bill));
+  const li = createBillRow(bill);
+  li.classList.add('is-entering');
+  document.getElementById('bills-list').appendChild(li);
+  void li.offsetHeight;
+  requestAnimationFrame(() => {
+    li.classList.remove('is-entering');
+  });
   document.getElementById('add-bill-form').reset();
   document.getElementById('input-name').focus();
   await loadSummary();
