@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" rx="64" fill="#006c49"/>
+  <!-- Linha curta (uma conta na lista) -->
+  <rect x="128" y="248" width="120" height="16" rx="8" fill="#ffffff"/>
+  <!-- Check (marcada como paga) -->
+  <path d="M 296 256 L 336 296 L 400 224"
+        fill="none"
+        stroke="#ffffff"
+        stroke-width="32"
+        stroke-linecap="round"
+        stroke-linejoin="round"/>
+</svg>
