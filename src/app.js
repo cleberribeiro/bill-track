@@ -61,6 +61,9 @@ export async function buildApp(options = {}) {
         styleSrc: ["'self'", 'fonts.googleapis.com'],
         fontSrc: ["'self'", 'fonts.gstatic.com'],
         frameAncestors: ["'none'"],
+        manifestSrc: ["'self'"],
+        workerSrc: ["'self'"],
+        imgSrc: ["'self'", 'data:'],
       },
     },
   });
@@ -93,6 +96,9 @@ export async function buildApp(options = {}) {
   fastify.addHook('onSend', (req, reply, payload, done) => {
     if (req.url.startsWith('/api')) {
       reply.header('Cache-Control', 'no-store');
+    }
+    if (req.url === '/sw.js' || req.url === '/manifest.json') {
+      reply.header('Cache-Control', 'no-cache');
     }
     done(null, payload);
   });
