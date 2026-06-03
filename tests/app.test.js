@@ -296,6 +296,45 @@ describe('BillTrack API', () => {
   });
 });
 
+describe('BillTrack PWA assets', () => {
+  let app;
+
+  beforeAll(async () => {
+    app = await buildApp();
+  });
+
+  afterAll(async () => {
+    await app.close();
+  });
+
+  test('serves manifest.json', async () => {
+    const response = await app.inject({
+      method: 'GET',
+      url: '/manifest.json',
+    });
+
+    expect(response.statusCode).toBe(200);
+    const body = JSON.parse(response.payload);
+    expect(body.name).toBe('BillTrack');
+    expect(body.display).toBe('standalone');
+    expect(body.theme_color).toBe('#006c49');
+    expect(body.background_color).toBe('#f7f9fb');
+    expect(Array.isArray(body.icons)).toBe(true);
+    expect(body.icons.length).toBeGreaterThanOrEqual(2);
+  });
+
+  test('serves sw.js with no-cache header', async () => {
+    const response = await app.inject({
+      method: 'GET',
+      url: '/sw.js',
+    });
+
+    expect(response.statusCode).toBe(200);
+    expect(response.headers['cache-control']).toBe('no-cache');
+    expect(response.payload).toMatch(/serviceWorker|self\.addEventListener|skipWaiting/);
+  });
+});
+
 describe('BillTrack production session cookies', () => {
   const previousNodeEnv = process.env.NODE_ENV;
 

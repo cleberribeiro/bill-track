@@ -19,14 +19,14 @@ Round de polish visual + instalação como PWA Android. Decisões consolidadas v
 
 ## Status
 
-- [ ] **Fase 1** — Login fix (CSP / inline `<style>` → `style.css`) — [01-login-fix.md](./01-login-fix.md)
-- [ ] **Fase 2** — Ícone SVG (Conceito C: linha + check) + PNGs — [02-icon-svg.md](./02-icon-svg.md)
-- [ ] **Fase 3** — Ícone aplicado em header + login — [03-icon-ui.md](./03-icon-ui.md)
-- [ ] **Fase 4** — Mobile sizing + polidas táteis — [04-mobile-tactile.md](./04-mobile-tactile.md)
-- [ ] **Fase 5** — Micro-animações discretas — [05-animations.md](./05-animations.md)
-- [ ] **Fase 6** — Empty state (h2 + cópia humana + filter empties) — [06-empty-state.md](./06-empty-state.md)
-- [ ] **Fase 7** — PWA: manifest, service worker, meta tags — [07-pwa-setup.md](./07-pwa-setup.md)
-- [ ] **Fase 8** — Testes + verificação no Android via Render — [08-tests-verify.md](./08-tests-verify.md)
+- [x] **Fase 1** — Login fix (CSP / inline `<style>` → `style.css`) — [01-login-fix.md](./01-login-fix.md)
+- [x] **Fase 2** — Ícone SVG (Conceito C: linha + check) + PNGs — [02-icon-svg.md](./02-icon-svg.md)
+- [x] **Fase 3** — Ícone aplicado em header + login — [03-icon-ui.md](./03-icon-ui.md)
+- [x] **Fase 4** — Mobile sizing + polidas táteis — [04-mobile-tactile.md](./04-mobile-tactile.md)
+- [x] **Fase 5** — Micro-animações discretas — [05-animations.md](./05-animations.md)
+- [x] **Fase 6** — Empty state (h2 + cópia humana + filter empties) — [06-empty-state.md](./06-empty-state.md)
+- [x] **Fase 7** — PWA: manifest, service worker, meta tags — [07-pwa-setup.md](./07-pwa-setup.md)
+- [x] **Fase 8** — Testes + verificação no Android via Render — [08-tests-verify.md](./08-tests-verify.md)
 
 ## Como usar
 
